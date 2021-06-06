@@ -17,27 +17,6 @@ from app.base.utils import(
 def route_default():
     return render_template('index.html')
 
-@blueprint.route('/track/<vehicle_no>')
-def track_vehicle(vehicle_no):
-    vehicle_no = vehicle_no.upper()
-
-    # Check registration
-    vehicle_info = VehicleRegistration.query.filter_by(id=vehicle_no).first()
-    if vehicle_info != None:
-        sights = VehicleSight.query.filter_by(vehicle_number=vehicle_no).limit(5).all()
-        info = VehicleRegistration.query.filter_by(id=vehicle_no).first()
-        center_lat, center_lon = getMapCenter(sights)
-        print(center_lat, center_lon)
-        return render_template(
-            'recon_track.html',
-            sights=sights,
-            info=info,
-            center_lat=center_lat,
-            center_lon=center_lon
-        )
-
-    abort(404)
-
 
 @blueprint.route('/<template>')
 def send_template(template):
