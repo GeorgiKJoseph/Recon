@@ -1,0 +1,66 @@
+{% extends "index.html" %}
+
+{% block stylesheets %}
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="/static/css/recon_track.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+<main class="content">
+    <div class="row">
+        {% if msg %}
+        <div class="col-md-8">
+            <div class="alert alert-info alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="alert-icon">
+                    <i class="far fa-fw fa-bell"></i>
+                </div>
+                <div class="alert-message">
+                    <strong>{{msg}}</strong>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Report Missing Vehicle</h5>
+                    <h6 class="card-subtitle text-muted">Adds to the blacklist, and sends to every node for cross verification.</h6>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Vehicle Number</label>
+                            {{ missingForm.hidden_tag() }}
+                            {{ missingForm.vehicle_id(placeholder="-- --- ----", class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Time</label>
+                            {{ missingForm.time(placeholder="Last seen", type="datetime-local", class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Place</label>
+                            {{ missingForm.place(placeholder="Last seen", class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label w-100">Latitude</label>
+                            {{ missingForm.latitude(placeholder="Lat coordinates", class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label w-100">Latitude</label>
+                            {{ missingForm.longitude(placeholder="Lon coordinates", class="form-control") }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}
+
