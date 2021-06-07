@@ -19,7 +19,14 @@ from app.base.utils import(
 def track_home():
     trackForm = TrackForm(request.form)
     if request.method == 'POST':
-        print(request.form['vehicle_id'])
+        vehicle_no = request.form['vehicle_id']
+        vehicle_no = vehicle_no.upper()
+        print(vehicle_no)
+        info = VehicleRegistration.query.filter_by(id=vehicle_no).first()
+        if info == None:
+            abort(404)
+        else:
+            return redirect(url_for('track_blueprint.track_vehicle', vehicle_no=vehicle_no))
 
     return render_template(
         'track_input.html',

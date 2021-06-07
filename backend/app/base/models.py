@@ -17,7 +17,7 @@ from app import db, login_manager
 class VehicleSight(db.Model):
     __tablename__ = 'recon_vehicle_sight'
 
-    id = Column(BigInteger, primary_key=True)
+    id = Column(Integer, primary_key=True)
     time = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
     vehicle_number = Column(String, ForeignKey('recon_vehicle_registration.id'))
     latitude = Column(String)
@@ -46,7 +46,7 @@ class VehicleRegistration(db.Model):
 class Camera(db.Model):
     __tablename__ = 'recon_camera'
 
-    id = Column(BigInteger, primary_key=True)
+    id = Column(Integer, primary_key=True)
     cam_type = Column(String)
     latitude = Column(String)
     longitude = Column(String)
@@ -58,13 +58,29 @@ class Camera(db.Model):
         return '<Camera:{}>'.format(self.id)
 
 
-# class Blacklist(db.Model):
-#     __tablename__ = 'recon_blacklist'
+class Blacklist(db.Model):
+    __tablename__ = 'recon_blacklist'
 
-#     id = Column(BigInteger, primary_key=True)
+    id = Column(Integer, primary_key=True)
+    vehicle_id = Column(Integer, ForeignKey('recon_vehicle_registration.id'))
+    last_seen_time = Column(TIMESTAMP)
+    last_seen_place = Column(String)
+    latitude = Column(String)
+    longitude = Column(String)
+
+    def __repr__(self):
+        return '<Blacklist:{}>'.format(self.vehicle_id)
+
+
+# class Blacklist_hits(db.Model):
+#     __tablename__ = 'recon_blacklist_hit'
+
+#     id = Column(Integer, primary_key=True)
+#     blacklist_id = Column(Integer, ForeignKey('recon_blacklist.id'))
 #     vehicle_id = Column(Integer, ForeignKey('recon_vehicle_registration.id'))
-#     last_seen_time = Column(TIMESTAMP)
-#     last_seen_place = Column(String)
+#     sight_id = Column(Integer, ForeignKey('recon_vehicle_sight.id'))
+#     time = Column(TIMESTAMP)
 
 #     def __repr__(self):
-#         return '<Blacklist:{}>'.format(self.vehicle_id)
+#         return '<Blacklist_hits:{}>'.format(self.vehicle_id)
+
