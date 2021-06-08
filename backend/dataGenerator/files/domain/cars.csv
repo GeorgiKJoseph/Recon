@@ -1,4 +1,3 @@
-brand,model,vehicle_type
 Honda,City,sedan
 Honda,Amaze,sedan
 Hyundai,Verna,sedan
@@ -6,15 +5,15 @@ Hyundai,Elantra,sedan
 Maruti,Dzire,sedan
 Audi,A6,sedan
 Toyota,Fortuner,suv
-Renault ,Duster,suv
+Renault,Duster,suv
 Tata,Harrier,suv
 Hyundai,Venue,suv
-Ford ,Endeavour,suv
+Ford,Endeavour,suv
 Mahindra,XUV300,suv
 Tata,Nexon,suv
-Maruti,Swift ,hatchback
+Maruti,Swift,hatchback
 Tata,Tiago,hatchback
 Hyundai,i20,hatchback
-Ford ,Figo,hatchback
+Ford,Figo,hatchback
 Tata,Altros,hatchback
 Maruti,Celerio,hatchback
