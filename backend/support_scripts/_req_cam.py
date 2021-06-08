@@ -1,7 +1,7 @@
 import requests
 
 ACCESS_TOKEN = ''
-DOMAIN = 'http://localhost:5000'
+DOMAIN = 'http://recon1234.pythonanywhere.com/'
 
 
 # Pinging server on boot
@@ -12,6 +12,7 @@ data = {
 }
 
 response = requests.post(url, data = data)
+print(response)
 response = response.json()
 try:
     status = response['status']
@@ -35,9 +36,11 @@ data = {
     'longitude': '76.111111',
     'place': 'Place name',
     'description': 'test desc',
+    
 }
 
 response = requests.post(url, data = data)
+
 response = response.json()
 try:
     status = response['status']
