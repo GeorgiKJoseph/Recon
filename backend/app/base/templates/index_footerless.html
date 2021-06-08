@@ -21,7 +21,7 @@
 	<div class="wrapper">
 		<nav id="sidebar" class="sidebar">
 			<div class="sidebar-content js-simplebar">
-				<a class="sidebar-brand" href="pages-profile.html">
+				<a class="sidebar-brand" href="/pages-profile.html">
 					<span class="align-middle">Recon </span>
 				</a>
 
@@ -42,9 +42,18 @@
 						</a>
 					</li>
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="recon_stolen-vehicles.html">
-							<i class="align-middle" data-feather="user"></i> <span class="align-middle">Stolen Vehicles</span>
+						<a class="sidebar-link" href="/blacklist">
+							<i class="align-middle" data-feather="user"></i> <span class="align-middle">Blacklist</span>
 						</a>
+					</li>
+					<li class="sidebar-item">
+						<a data-target="#forms" data-toggle="collapse" class="sidebar-link">
+              				<i class="align-middle" data-feather="check-circle"></i> <span class="align-middle">Report</span>
+            			</a>
+						<ul id="forms" class="sidebar-dropdown list-unstyled collapse show" data-parent="#sidebar">
+							<li class="sidebar-item"><a class="sidebar-link" href="/report/missing">Missing Vehicle</a></li>
+							<li class="sidebar-item"><a class="sidebar-link" href="/report/missing">Suspect Vehicle</a></li>
+						</ul>
 					</li>
 
 			</div>

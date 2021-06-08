@@ -1,0 +1,45 @@
+{% extends "index.html" %}
+
+{% block stylesheets %}
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="/static/css/recon_track.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+<main class="content">
+    <div class="col-12 col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Blacklist</h5>
+                <h6 class="card-subtitle text-muted">Use <code>.table-striped</code> to add zebra-striping to any table row within the <code>&lt;tbody&gt;</code>.</h6>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width:20%;">Vehicle Number</th>
+                        <th style="width:20%">Time</th>
+                        <th class="d-none d-md-table-cell">Place</th>
+                        <th>track</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vehicle in blacklist %}
+                    <tr>
+                        <td>{{ vehicle.vehicle_id }}</td>
+                        <td>{{ vehicle.last_seen_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td class="d-none d-md-table-cell">{{ vehicle.last_seen_place }}</td>
+                        <td class="table-action">
+                            <a href="/track/{{ vehicle.vehicle_id }}">track</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}
+
