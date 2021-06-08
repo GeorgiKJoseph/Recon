@@ -11,6 +11,7 @@ from app.base.models import(
     Camera,
     Blacklist
 )
+from datetime import datetime
 
 SECRET_KEY = 'Xn2r5u8x/A?D(G-KaPdS'
 directions = ['north', 'south', 'east', 'west']
@@ -90,3 +91,37 @@ def data_cam():
             })
     return json.dumps({'status':'ERROR 403'})
 
+
+# Add blacklist data
+@blueprint.route('/data/blacklist', methods=['POST'])
+def data_blacklist():
+    token = request.form.get('access_token')
+    if token == SECRET_KEY:
+        vehicle_id = request.form.get('vehicle_id')
+        time_in = request.form.get('time')
+        place = request.form.get('place')
+        latitude = request.form.get('latitude')
+        longitude = request.form.get('longitude')
+        time_final = datetime(
+            int(time_in[:4]), int(time_in[5:7]),
+            int(time_in[8:10]), int(time_in[11:13]),
+            int(time_in[14:16])
+        )
+        blacklist = Blacklist.query.filter_by(vehicle_id=vehicle_id).first()
+        if blacklist == None:
+            new_vehicle = Blacklist(
+                vehicle_id = vehicle_id,
+                last_seen_time = time_final,
+                last_seen_place = place,
+                latitude = latitude,
+                longitude = longitude,
+            )
+            db.session.add(new_vehicle)
+            db.session.commit()
+            return json.dumps({'status':'OK'})
+        else:
+            return json.dumps({
+                'status':'OK',
+                'msg':'Cam already exists.'
+            })
+    return json.dumps({'status':'ERROR 403'})
