@@ -81,6 +81,28 @@
             .addTo(map);
         tooltip.getElement().style.cursor = 'pointer';
         }
+        //updated code
+        var stolen = ['Adoor 08:23:23 AM' ,9.1, 76.7]; 
+        var redIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+        });
+
+        L.marker([stolen[1],stolen[2]], {icon: redIcon}).addTo(map);
+        var tooltip = L.tooltip({
+            direction: 'down',
+            permanent: true,
+            interactive: true,
+            noWrap: true,
+            opacity: 1,
+            }).setContent(stolen[0])
+            .setLatLng(new L.LatLng(stolen[1], stolen[2]))
+            .addTo(map);
+        tooltip.getElement().style.cursor = 'pointer';
         map.invalidateSize();
     </script>
 
