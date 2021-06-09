@@ -17,8 +17,8 @@ from PIL import Image
 
 # Stored in db in RPi
 CAM_ID = 1
-LATITUDE = '9.161718'
-LONGITUDE = '16.121314'
+LATITUDE = '8.481739'
+LONGITUDE = '76.957361'
 TIMEOUT = 10
 DOMAIN = 'http://localhost:5000'
 
@@ -304,6 +304,9 @@ class Reconlive:
     def upload_sight(self, vehicle_id):
         print('Uploading sight info')
         url = DOMAIN + '/iot/sight'
+        print(self.token)
+        print(vehicle_id)
+        print(CAM_ID)
         data = {
         'access_token': self.token,
         'vehicle_id': vehicle_id,
