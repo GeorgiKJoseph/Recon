@@ -52,6 +52,7 @@ class ImageInput:
     def sampleImageSingleLP():
         image_path = "IndianLP/india_car_plate.jpg"
         image = Get_image_by_path(image_path)
+        DisplayImage.singleImage(image,'raw_image')
         return image
 
     def sampleImageMultipleLP():
@@ -113,7 +114,8 @@ class Segmentation:
                     # Select contour which has the height larger than 50% of the plate
                     if h/img[0].shape[0]>=0.5:
                         # Draw bounding box around digit number
-                        cv2.rectangle(test_roi, (x, y), (x + w, y + h), (0, 255,0), 2)
+                        rect=cv2.rectangle(test_roi, (x, y), (x + w, y + h), (0, 255,0), 2)
+                        DisplayImage.singleImage(rect,'boundbox')
 
                         # Separate number and gibe prediction
                         curr_num = img[1][y:y+h,x:x+w]
@@ -137,13 +139,16 @@ class Segmentation:
             plate_image = cv2.convertScaleAbs(lp_img[0], alpha=(255.0))
             # Converting to grayscale and blurring the image
             gray = cv2.cvtColor(plate_image, cv2.COLOR_BGR2GRAY)
+            DisplayImage.singleImage(gray,'grayscale')
             blur = cv2.GaussianBlur(gray,(7,7),0)
+            DisplayImage.singleImage(blur,'blurred')
             # Appling inversed thresh_binary
             binary = cv2.threshold(blur, 180, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+            DisplayImage.singleImage(binary,'binary')
             ## Applied dilation 
             kernel3 = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
             thre_mor = cv2.morphologyEx(binary, cv2.MORPH_DILATE, kernel3)
-
+            DisplayImage.singleImage(thre_mor,'threshold')
             result.append([plate_image, thre_mor, binary])
         return result
 
@@ -226,6 +231,10 @@ class Execute:
         else:
             print('No LP detected')
 
+class DisplayImage:
+    def singleImage(image,title='image'):
+        cv2.imshow(title,image)
+        cv2.waitKey(0)
 
 
 # Preparing pretrained model for vehicle recognition
@@ -246,4 +255,4 @@ print("[INFO] Labels loaded successfully...")
 
 
 if __name__ == '__main__':
-    Execute.camLoop()
+    Execute.sampleSingleLP()
