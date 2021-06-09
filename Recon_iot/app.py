@@ -1,4 +1,5 @@
 import cv2
+import requests
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
@@ -204,7 +205,7 @@ class Execute:
                     number = OCR.run(chars)
                     print('Sight: ', number)
                     if recon.isUp():
-                        recon.upload(number)
+                        recon.upload_sight(number)
                     lp_num.append(number)
             else:
                 print('No LP detected')
@@ -221,7 +222,7 @@ class Execute:
                 number = OCR.run(chars)
                 print('Sight: ', number)
                 if recon.isUp():
-                    recon.upload(number)
+                    recon.upload_sight(number)
                 lp_num.append(number)
         else:
             print('No LP detected')
