@@ -9,7 +9,8 @@ from app.track.forms import TrackForm
 from app.base.models import(
     VehicleSight,
     VehicleRegistration,
-    Camera
+    Camera,
+    Blacklist
 )
 from app.base.utils import(
     getMapCenter
@@ -42,9 +43,11 @@ def track_vehicle(vehicle_no):
     if vehicle_info != None:
         sights = VehicleSight.query.filter_by(vehicle_number=vehicle_no).limit(5).all()
         info = VehicleRegistration.query.filter_by(id=vehicle_no).first()
+        missing = Blacklist.query.filter_by(vehicle_id=vehicle_no).first()
         center_lat, center_lon = getMapCenter(sights)
         return render_template(
             'track_vehicle.html',
+            missing=missing,
             sights=sights,
             info=info,
             center_lat=center_lat,

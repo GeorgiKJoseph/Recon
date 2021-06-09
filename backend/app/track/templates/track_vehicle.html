@@ -82,7 +82,11 @@
         tooltip.getElement().style.cursor = 'pointer';
         }
         //updated code
-        var stolen = ['Adoor 08:23:23 AM' ,9.1, 76.7]; 
+        {% if missing %}
+            var stolen = ['<b>Last seen</b><br>'+'{{missing.last_seen_place|truncate(15)}}' ,{{missing.latitude}}, {{missing.longitude}}];
+        {% else %}
+            var stolen = ['',0,0];
+        {% endif %}
         var redIcon = new L.Icon({
         iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',

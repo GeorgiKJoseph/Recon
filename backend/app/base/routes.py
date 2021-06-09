@@ -15,7 +15,7 @@ from app.base.utils import(
 
 @blueprint.route('/')
 def route_default():
-    return render_template('index.html')
+    return render_template('dashboard.html')
 
 
 @blueprint.route('/<template>')
