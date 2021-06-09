@@ -21,17 +21,19 @@ directions = ['north', 'south', 'east', 'west']
 @blueprint.route('/iot/ping', methods=['POST'])
 def iot_ping():
     token = request.form.get('token')
+    print('Verifying ping..')
     if token == 'long live cutie':
 
         # Collecting blacklist
         blacklist = Blacklist.query.all()
         blacklist = [x.vehicle_id for x in blacklist]
-
+        print('Granding ACCESS_TOKEN')
         return json.dumps({
             'status':'OK',
             'access_token': SECRET_KEY,
             'blacklist': blacklist
             })
+    print('Invalid node')
     return json.dumps({'status':'ERROR'})
 
 
@@ -39,7 +41,9 @@ def iot_ping():
 @blueprint.route('/iot/sight', methods=['POST'])
 def register_sight():
     token = request.form.get('access_token')
+    print('Verifying ACCESS_TOKEN')
     if token == SECRET_KEY:
+        print('Verified')
         cam_id = request.form.get('cam_id')
         vehicle_id = request.form.get('vehicle_id')
         direction = request.form.get('direction')
@@ -48,6 +52,7 @@ def register_sight():
         cam = Camera.query.filter_by(id=cam_id).first()
         vehicle = VehicleRegistration.query.filter_by(id=vehicle_id).first()
         if cam != None and vehicle != None:
+            print('Uploading vehicle sight info to DB')
             sight = VehicleSight(
                 vehicle_number = vehicle_id,
                 latitude = cam.latitude,
@@ -58,5 +63,7 @@ def register_sight():
             )
             db.session.add(sight)
             db.session.commit()
+            print('Upload complete.')
             return json.dumps({'status':'OK'})
+    print('Failed')
     return json.dumps({'status':'ERROR'})

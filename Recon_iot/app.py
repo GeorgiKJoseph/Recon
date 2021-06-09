@@ -14,6 +14,12 @@ import glob
 import time
 from PIL import Image
 
+# Stored in db in RPi
+CAM_ID = 1
+LATITUDE = '9.161718'
+LONGITUDE = '16.121314'
+TIMEOUT = 10
+DOMAIN = 'http://localhost:5000'
 
 # Loads model <wpod-net.json> into <wpod-net.h5>
 def load_model(path):
@@ -186,7 +192,7 @@ class OCR:
 
 
 class Execute:
-    def camLoop():
+    def camLoop(recon):
         while True:
             img = ImageInput.camImage()
             is_images, lp_img = LPImageExtraction.singleLP(img)
@@ -196,13 +202,15 @@ class Execute:
                 lp_num = []
                 for chars in chars_img_list:
                     number = OCR.run(chars)
-                    print(number)
+                    print('Sight: ', number)
+                    if recon.isUp():
+                        recon.upload(number)
                     lp_num.append(number)
             else:
                 print('No LP detected')
 
 
-    def sampleSingleLP():
+    def sampleSingleLP(recon):
         img = ImageInput.sampleImageSingleLP()
         is_images, lp_img = LPImageExtraction.singleLP(img)
         if is_images:
@@ -211,7 +219,9 @@ class Execute:
             lp_num = []
             for chars in chars_img_list:
                 number = OCR.run(chars)
-                print(number)
+                print('Sight: ', number)
+                if recon.isUp():
+                    recon.upload(number)
                 lp_num.append(number)
         else:
             print('No LP detected')
@@ -231,10 +241,84 @@ class Execute:
         else:
             print('No LP detected')
 
+
 class DisplayImage:
     def singleImage(image,title='image'):
         cv2.imshow(title,image)
         cv2.waitKey(0)
+
+
+class Reconlive:
+    def __init__(self):
+        stat, tkn, bl = self.initialize()
+        if stat:
+            self.token = tkn
+            self.blacklist = bl
+        else:
+            self.token = ''
+            self.blacklist = []
+
+
+    def isUp(self):
+        if self.token == '':
+            return False
+        return True
+
+    def reset(self):
+        stat, tkn, bl = self.initialize()
+        if stat:
+            self.token = tkn
+            self.blacklist = bl
+            return True
+        return False
+
+
+    def initialize(self):
+        # Pinging server on boot
+        print('Ping reconlive.pythonanywhere.com')
+        url = DOMAIN + '/iot/ping'
+        data = {
+            'token': 'long live cutie'
+        }
+
+        response = requests.post(url, data = data)
+        response = response.json()
+        try:
+            status = response['status']
+            if status == 'OK':
+                print('Fetching access token...')
+                print('Downloading blacklist...')
+                token = response['access_token']
+                blacklist = response['blacklist']
+                print('Connection established.')
+                return True, token, blacklist
+            else:
+                print('Unable to connect')
+                return False, None, None
+        except:
+            print('Unable to connect')
+            return False, None, None
+
+
+    def upload_sight(self, vehicle_id):
+        print('Uploading sight info')
+        url = DOMAIN + '/iot/sight'
+        data = {
+        'access_token': self.token,
+        'vehicle_id': vehicle_id,
+        'cam_id': CAM_ID
+        }
+
+        response = requests.post(url, data = data)
+        response = response.json()
+        try:
+            status = response['status']
+            if status == 'OK':
+                print('Sight info updated successfully')
+            else:
+                print('Upload failed.')
+        except:
+            print('Upload failed.')
 
 
 # Preparing pretrained model for vehicle recognition
@@ -254,5 +338,18 @@ labels.classes_ = np.load('license_character_classes.npy')
 print("[INFO] Labels loaded successfully...")
 
 
+def run():
+    recon = Reconlive()
+    conn_try = 0
+    while not recon.isUp():
+        conn_try += 1
+        if recon.reset():
+            break
+    if recon.isUp():
+        Execute.sampleSingleLP(recon)
+    else:
+        print('Unable to connect to {}'.format(DOMAIN))
+
+
 if __name__ == '__main__':
-    Execute.sampleSingleLP()
+    run()
