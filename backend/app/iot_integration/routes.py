@@ -47,19 +47,12 @@ def register_sight():
         cam_id = request.form.get('cam_id')
         vehicle_id = request.form.get('vehicle_id')
         direction = request.form.get('direction')
-        print(cam_id)
-        print(vehicle_id)
-        print(direction)
         if direction not in directions:
             direction = ''
         cam = Camera.query.filter_by(id=cam_id).first()
         vehicle = VehicleRegistration.query.filter_by(id=vehicle_id).first()
-        if cam == None:
-            print("cam none")
-        if vehicle == None:
-            print("vehicle none")
         if cam != None and vehicle != None:
-            print('Uploading vehicle sight info to DB')
+            print('Uploading vehicle sight info of {} to DB'.format(vehicle_id))
             sight = VehicleSight(
                 vehicle_number = vehicle_id,
                 latitude = cam.latitude,
