@@ -1,6 +1,5 @@
 # [Recon](https://#) Live
 
-[Cognetry Labs Inc.](https://www.cognetrylabs.ai/)
 
 **Flask** based webapp for traffic anomaly detection.
 
